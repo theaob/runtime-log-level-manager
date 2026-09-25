@@ -33,7 +33,7 @@ dependencies {
 ```
 
 Yerel olarak kullanmak için: `./gradlew :log-level-manager:publishToMavenLocal` ve
-`implementation("com.github.theaob:log-level-manager:0.1.0")` (`mavenLocal()` reposu ile).
+`implementation("tr.com.onurbaykal:log-level-manager:0.1.0")` (`mavenLocal()` reposu ile).
 
 Gereksinimler: Java 11+, JavaFX 17+ (`javafx.controls`).
 
@@ -82,9 +82,9 @@ bayrağın (ör. `-Ddebug.tools=true`) arkasına koymanız yeterli.
 - **java.util.logging**: handler'ların kendi seviyeleri vardır (varsayılan `ConsoleHandler` INFO).
   Bir loggeri DEBUG/TRACE'e çektiğinizde çıktı görmek için handler seviyesini de düşürmeniz gerekir.
 - Farklı bir loglama altyapısı için `LoggingBackend` arayüzünü uygulayıp
-  `LogLevelManager.backend = MyBackend()` ile ya da `META-INF/services/io.github.theaob.loglevel.LoggingBackend`
+  `LogLevelManager.backend = MyBackend()` ile ya da `META-INF/services/tr.com.onurbaykal.loglevel.LoggingBackend`
   dosyasıyla kaydedebilirsiniz.
-- Modüler (JPMS) uygulamalarda modül adı `io.github.theaob.loglevel`'dir.
+- Modüler (JPMS) uygulamalarda modül adı `tr.com.onurbaykal.loglevel`'dir.
 
 ## Geliştirme
 

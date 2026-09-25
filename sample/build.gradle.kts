@@ -28,5 +28,5 @@ dependencies {
 }
 
 application {
-    mainClass.set("io.github.theaob.loglevel.sample.SampleAppKt")
+    mainClass.set("tr.com.onurbaykal.loglevel.sample.SampleAppKt")
 }

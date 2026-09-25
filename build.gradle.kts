@@ -4,6 +4,6 @@ plugins {
 }
 
 allprojects {
-    group = "com.github.theaob"
+    group = "tr.com.onurbaykal"
     version = "0.1.0"
 }

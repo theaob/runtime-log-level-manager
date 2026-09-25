@@ -46,7 +46,7 @@ tasks.test {
 
 tasks.jar {
     manifest {
-        attributes("Automatic-Module-Name" to "io.github.theaob.loglevel")
+        attributes("Automatic-Module-Name" to "tr.com.onurbaykal.loglevel")
     }
 }
 

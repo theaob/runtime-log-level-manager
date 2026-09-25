@@ -4,9 +4,9 @@
             <pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
-    <appender name="UI" class="io.github.theaob.loglevel.sample.UiLogAppender"/>
+    <appender name="UI" class="tr.com.onurbaykal.loglevel.sample.UiLogAppender"/>
 
-    <logger name="io.github.theaob.loglevel.sample.billing" level="WARN"/>
+    <logger name="tr.com.onurbaykal.loglevel.sample.billing" level="WARN"/>
 
     <root level="INFO">
         <appender-ref ref="CONSOLE"/>
