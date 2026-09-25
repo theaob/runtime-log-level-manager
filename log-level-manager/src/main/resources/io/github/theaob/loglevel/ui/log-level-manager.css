@@ -1,0 +1,154 @@
+.log-level-manager {
+    -llm-background: #f4f6f9;
+    -llm-surface: #ffffff;
+    -llm-border: #d9dee5;
+    -llm-text: #2c3440;
+    -llm-muted: #7a8494;
+    -llm-accent: #2f80ed;
+    -fx-background-color: -llm-background;
+}
+
+.log-level-manager .header {
+    -fx-background-color: -llm-surface;
+    -fx-border-color: transparent transparent -llm-border transparent;
+    -fx-padding: 12 16 12 16;
+}
+
+.log-level-manager .title {
+    -fx-font-size: 1.5em;
+    -fx-font-weight: bold;
+    -fx-text-fill: -llm-text;
+}
+
+.log-level-manager .badge {
+    -fx-background-color: #e6effd;
+    -fx-background-radius: 10;
+    -fx-text-fill: -llm-accent;
+    -fx-padding: 2 8 2 8;
+    -fx-font-size: 0.9em;
+}
+
+.log-level-manager .toolbar {
+    -fx-padding: 10 16 10 16;
+}
+
+.log-level-manager .button.primary {
+    -fx-background-color: -llm-accent;
+    -fx-text-fill: white;
+    -fx-background-radius: 3;
+}
+
+.log-level-manager .button.primary:hover {
+    -fx-background-color: derive(-llm-accent, -12%);
+}
+
+.log-level-manager .table-view {
+    -fx-background-color: -llm-surface;
+    -fx-border-color: -llm-border;
+    -fx-border-width: 1 0 1 0;
+}
+
+.log-level-manager .table-row-cell {
+    -fx-cell-size: 34px;
+}
+
+.log-level-manager .name-cell {
+    -fx-font-family: "Monospaced";
+    -fx-text-fill: -llm-muted;
+    -fx-alignment: center-left;
+    -fx-padding: 0 0 0 12;
+}
+
+.log-level-manager .table-row-cell:configured .name-cell {
+    -fx-text-fill: -llm-text;
+    -fx-font-weight: bold;
+}
+
+.log-level-manager .table-row-cell:modified .name-cell {
+    -fx-border-color: transparent transparent transparent -llm-accent;
+    -fx-border-width: 0 0 0 3;
+    -fx-padding: 0 0 0 9;
+}
+
+.log-level-manager .table-row-cell:selected .name-cell {
+    -fx-text-fill: white;
+}
+
+.log-level-manager .level-cell {
+    -fx-alignment: center-left;
+}
+
+/* Segmented level buttons */
+
+.log-level-manager .level-button {
+    -llm-level: #6c757d;
+    -fx-background-color: -llm-border, -llm-surface;
+    -fx-background-insets: 0, 1 0 1 1;
+    -fx-background-radius: 0;
+    -fx-text-fill: -llm-muted;
+    -fx-font-size: 0.85em;
+    -fx-min-width: 58;
+    -fx-pref-width: 58;
+    -fx-padding: 3 0 3 0;
+    -fx-cursor: hand;
+}
+
+.log-level-manager .level-button.first {
+    -fx-background-radius: 3 0 0 3;
+}
+
+.log-level-manager .level-button.last {
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0 3 3 0;
+}
+
+.log-level-manager .level-button:hover {
+    -fx-background-color: -llm-border, #eef1f5;
+    -fx-text-fill: -llm-text;
+}
+
+.log-level-manager .level-trace { -llm-level: #6c757d; }
+.log-level-manager .level-debug { -llm-level: #2f80ed; }
+.log-level-manager .level-info  { -llm-level: #1f9d55; }
+.log-level-manager .level-warn  { -llm-level: #d98c00; }
+.log-level-manager .level-error { -llm-level: #d63939; }
+.log-level-manager .level-fatal { -llm-level: #8e1b1b; }
+.log-level-manager .level-off   { -llm-level: #343a40; }
+
+/* Inherited level: outlined */
+.log-level-manager .level-button:effective {
+    -fx-background-color: -llm-level, derive(-llm-level, 88%);
+    -fx-background-insets: 0, 1;
+    -fx-text-fill: -llm-level;
+    -fx-font-weight: bold;
+}
+
+/* Explicitly configured level: filled */
+.log-level-manager .level-button:effective:configured {
+    -fx-background-color: -llm-level;
+    -fx-text-fill: white;
+}
+
+.log-level-manager .reset-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: -llm-accent;
+    -fx-font-size: 0.85em;
+    -fx-cursor: hand;
+    -fx-padding: 3 6 3 6;
+}
+
+.log-level-manager .reset-button:hover {
+    -fx-underline: true;
+}
+
+.log-level-manager .footer {
+    -fx-padding: 6 16 6 16;
+}
+
+.log-level-manager .footer .label {
+    -fx-text-fill: -llm-muted;
+}
+
+.log-level-manager .footer .label:error {
+    -fx-text-fill: #d63939;
+}

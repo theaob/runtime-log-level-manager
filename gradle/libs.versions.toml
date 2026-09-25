@@ -1,0 +1,20 @@
+[versions]
+kotlin = "2.1.21"
+javafx-plugin = "0.1.0"
+slf4j = "2.0.17"
+logback = "1.5.18"
+log4j = "2.24.3"
+junit = "5.11.4"
+
+[libraries]
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+log4j-api = { module = "org.apache.logging.log4j:log4j-api", version.ref = "log4j" }
+log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "log4j" }
+junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
+junit-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+javafx = { id = "org.openjfx.javafxplugin", version.ref = "javafx-plugin" }
