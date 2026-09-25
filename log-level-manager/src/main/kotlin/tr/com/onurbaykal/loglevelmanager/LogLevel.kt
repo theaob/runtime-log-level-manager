@@ -1,4 +1,4 @@
-package tr.com.onurbaykal.loglevel
+package tr.com.onurbaykal.loglevelmanager
 
 /**
  * Backend-neutral log levels, ordered from most to least verbose.

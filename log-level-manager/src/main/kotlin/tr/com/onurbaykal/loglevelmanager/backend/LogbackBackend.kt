@@ -1,11 +1,11 @@
-package tr.com.onurbaykal.loglevel.backend
+package tr.com.onurbaykal.loglevelmanager.backend
 
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.Logger
 import ch.qos.logback.classic.LoggerContext
-import tr.com.onurbaykal.loglevel.LogLevel
-import tr.com.onurbaykal.loglevel.LoggerInfo
-import tr.com.onurbaykal.loglevel.LoggingBackend
+import tr.com.onurbaykal.loglevelmanager.LogLevel
+import tr.com.onurbaykal.loglevelmanager.LoggerInfo
+import tr.com.onurbaykal.loglevelmanager.LoggingBackend
 import org.slf4j.LoggerFactory
 
 /** Logback, reached through SLF4J. */

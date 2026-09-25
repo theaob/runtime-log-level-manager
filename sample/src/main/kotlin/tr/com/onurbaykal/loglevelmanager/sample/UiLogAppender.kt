@@ -1,4 +1,4 @@
-package tr.com.onurbaykal.loglevel.sample
+package tr.com.onurbaykal.loglevelmanager.sample
 
 import ch.qos.logback.classic.spi.ILoggingEvent
 import ch.qos.logback.core.AppenderBase

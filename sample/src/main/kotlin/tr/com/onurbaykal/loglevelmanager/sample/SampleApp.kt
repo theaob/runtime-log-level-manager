@@ -1,9 +1,9 @@
-package tr.com.onurbaykal.loglevel.sample
+package tr.com.onurbaykal.loglevelmanager.sample
 
-import tr.com.onurbaykal.loglevel.LogLevelManager
-import tr.com.onurbaykal.loglevel.sample.billing.InvoiceService
-import tr.com.onurbaykal.loglevel.sample.orders.OrderService
-import tr.com.onurbaykal.loglevel.sample.orders.OrderRepository
+import tr.com.onurbaykal.loglevelmanager.LogLevelManager
+import tr.com.onurbaykal.loglevelmanager.sample.billing.InvoiceService
+import tr.com.onurbaykal.loglevelmanager.sample.orders.OrderService
+import tr.com.onurbaykal.loglevelmanager.sample.orders.OrderRepository
 import javafx.animation.KeyFrame
 import javafx.animation.Timeline
 import javafx.application.Application

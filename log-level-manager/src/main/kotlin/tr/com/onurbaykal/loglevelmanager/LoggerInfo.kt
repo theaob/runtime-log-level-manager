@@ -1,4 +1,4 @@
-package tr.com.onurbaykal.loglevel
+package tr.com.onurbaykal.loglevelmanager
 
 /**
  * Snapshot of a single logger.

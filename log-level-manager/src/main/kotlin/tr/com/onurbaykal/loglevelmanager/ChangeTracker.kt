@@ -1,4 +1,4 @@
-package tr.com.onurbaykal.loglevel
+package tr.com.onurbaykal.loglevelmanager
 
 /** Remembers the level each logger had before it was first changed, so changes can be reverted. */
 internal class ChangeTracker {

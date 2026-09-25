@@ -1,4 +1,4 @@
-package tr.com.onurbaykal.loglevel.sample.orders
+package tr.com.onurbaykal.loglevelmanager.sample.orders
 
 import org.slf4j.LoggerFactory
 import kotlin.random.Random

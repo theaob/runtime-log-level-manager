@@ -1,8 +1,8 @@
-package tr.com.onurbaykal.loglevel.backend
+package tr.com.onurbaykal.loglevelmanager.backend
 
-import tr.com.onurbaykal.loglevel.LogLevel
-import tr.com.onurbaykal.loglevel.LoggerInfo
-import tr.com.onurbaykal.loglevel.LoggingBackend
+import tr.com.onurbaykal.loglevelmanager.LogLevel
+import tr.com.onurbaykal.loglevelmanager.LoggerInfo
+import tr.com.onurbaykal.loglevelmanager.LoggingBackend
 import org.apache.logging.log4j.Level
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.core.LoggerContext

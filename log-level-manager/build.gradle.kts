@@ -47,7 +47,7 @@ tasks.test {
 
 tasks.jar {
     manifest {
-        attributes("Automatic-Module-Name" to "tr.com.onurbaykal.loglevel")
+        attributes("Automatic-Module-Name" to "tr.com.onurbaykal.loglevelmanager")
     }
 }
 

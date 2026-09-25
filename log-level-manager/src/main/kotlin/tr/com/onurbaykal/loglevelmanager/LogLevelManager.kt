@@ -1,6 +1,6 @@
-package tr.com.onurbaykal.loglevel
+package tr.com.onurbaykal.loglevelmanager
 
-import tr.com.onurbaykal.loglevel.ui.LoggersView
+import tr.com.onurbaykal.loglevelmanager.ui.LoggersView
 import javafx.application.Platform
 import javafx.scene.Parent
 import javafx.scene.Scene

@@ -1,6 +1,6 @@
-package tr.com.onurbaykal.loglevel.backend
+package tr.com.onurbaykal.loglevelmanager.backend
 
-import tr.com.onurbaykal.loglevel.LogLevel
+import tr.com.onurbaykal.loglevelmanager.LogLevel
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull

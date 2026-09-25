@@ -1,8 +1,8 @@
-package tr.com.onurbaykal.loglevel.backend
+package tr.com.onurbaykal.loglevelmanager.backend
 
-import tr.com.onurbaykal.loglevel.LogLevel
-import tr.com.onurbaykal.loglevel.LoggerInfo
-import tr.com.onurbaykal.loglevel.LoggingBackend
+import tr.com.onurbaykal.loglevelmanager.LogLevel
+import tr.com.onurbaykal.loglevelmanager.LoggerInfo
+import tr.com.onurbaykal.loglevelmanager.LoggingBackend
 import java.util.concurrent.ConcurrentHashMap
 import java.util.logging.Level
 import java.util.logging.LogManager

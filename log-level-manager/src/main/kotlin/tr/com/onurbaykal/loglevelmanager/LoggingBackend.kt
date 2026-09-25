@@ -1,11 +1,11 @@
-package tr.com.onurbaykal.loglevel
+package tr.com.onurbaykal.loglevelmanager
 
 /**
  * Adapter over a concrete logging framework.
  *
  * Built-in implementations exist for Logback, Log4j2 and java.util.logging and are picked
  * automatically by [LoggingBackends.detect]. A custom implementation can be registered through
- * [java.util.ServiceLoader] (`META-INF/services/tr.com.onurbaykal.loglevel.LoggingBackend`) or
+ * [java.util.ServiceLoader] (`META-INF/services/tr.com.onurbaykal.loglevelmanager.LoggingBackend`) or
  * assigned to [LogLevelManager.backend].
  */
 interface LoggingBackend {

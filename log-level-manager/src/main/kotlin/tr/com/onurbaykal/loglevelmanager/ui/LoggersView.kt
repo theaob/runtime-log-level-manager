@@ -1,8 +1,8 @@
-package tr.com.onurbaykal.loglevel.ui
+package tr.com.onurbaykal.loglevelmanager.ui
 
-import tr.com.onurbaykal.loglevel.LogLevel
-import tr.com.onurbaykal.loglevel.LogLevelManager
-import tr.com.onurbaykal.loglevel.LoggerInfo
+import tr.com.onurbaykal.loglevelmanager.LogLevel
+import tr.com.onurbaykal.loglevelmanager.LogLevelManager
+import tr.com.onurbaykal.loglevelmanager.LoggerInfo
 import javafx.beans.property.ReadOnlyObjectWrapper
 import javafx.collections.FXCollections
 import javafx.collections.transformation.FilteredList

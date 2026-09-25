@@ -73,9 +73,9 @@ bayrağın (ör. `-Ddebug.tools=true`) arkasına koymanız yeterli.
 - **java.util.logging**: handler'ların kendi seviyeleri vardır (varsayılan `ConsoleHandler` INFO).
   Bir loggeri DEBUG/TRACE'e çektiğinizde çıktı görmek için handler seviyesini de düşürmeniz gerekir.
 - Farklı bir loglama altyapısı için `LoggingBackend` arayüzünü uygulayıp
-  `LogLevelManager.backend = MyBackend()` ile ya da `META-INF/services/tr.com.onurbaykal.loglevel.LoggingBackend`
+  `LogLevelManager.backend = MyBackend()` ile ya da `META-INF/services/tr.com.onurbaykal.loglevelmanager.LoggingBackend`
   dosyasıyla kaydedebilirsiniz.
-- Modüler (JPMS) uygulamalarda modül adı `tr.com.onurbaykal.loglevel`'dir.
+- Modüler (JPMS) uygulamalarda modül adı `tr.com.onurbaykal.loglevelmanager`'dir.
 
 ## Geliştirme
 

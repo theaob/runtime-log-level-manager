@@ -1,8 +1,8 @@
-package tr.com.onurbaykal.loglevel
+package tr.com.onurbaykal.loglevelmanager
 
-import tr.com.onurbaykal.loglevel.backend.JulBackend
-import tr.com.onurbaykal.loglevel.backend.Log4j2Backend
-import tr.com.onurbaykal.loglevel.backend.LogbackBackend
+import tr.com.onurbaykal.loglevelmanager.backend.JulBackend
+import tr.com.onurbaykal.loglevelmanager.backend.Log4j2Backend
+import tr.com.onurbaykal.loglevelmanager.backend.LogbackBackend
 import java.util.ServiceLoader
 
 /** Detects which logging framework the application is using. */
