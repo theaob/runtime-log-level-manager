@@ -1,16 +1,17 @@
+import com.vanniktech.maven.publish.JavadocJar
+import com.vanniktech.maven.publish.KotlinJvm
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `java-library`
-    `maven-publish`
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.javafx)
+    alias(libs.plugins.maven.publish)
 }
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11
-    withSourcesJar()
 }
 
 kotlin {
@@ -50,16 +51,38 @@ tasks.jar {
     }
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            artifactId = "log-level-manager"
-            from(components["java"])
-            pom {
-                name.set("Runtime Log Level Manager")
-                description.set("Drop-in JavaFX UI to change logger levels at runtime (Logback, Log4j2, java.util.logging).")
-                url.set("https://github.com/theaob/runtime-log-level-manager")
+mavenPublishing {
+    configure(KotlinJvm(javadocJar = JavadocJar.Empty(), sourcesJar = true))
+    coordinates(artifactId = "log-level-manager")
+    publishToMavenCentral(automaticRelease = true)
+    // Signing keys come from ORG_GRADLE_PROJECT_signingInMemoryKey* in CI; local builds stay unsigned.
+    if (providers.gradleProperty("signingInMemoryKey").isPresent) {
+        signAllPublications()
+    }
+
+    pom {
+        name.set("Runtime Log Level Manager")
+        description.set("Drop-in JavaFX UI to change logger levels at runtime (Logback, Log4j2, java.util.logging).")
+        inceptionYear.set("2026")
+        url.set("https://github.com/theaob/runtime-log-level-manager")
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("https://www.apache.org/licenses/LICENSE-2.0.txt")
+                distribution.set("repo")
             }
+        }
+        developers {
+            developer {
+                id.set("theaob")
+                name.set("Onur Baykal")
+                url.set("https://github.com/theaob")
+            }
+        }
+        scm {
+            url.set("https://github.com/theaob/runtime-log-level-manager")
+            connection.set("scm:git:git://github.com/theaob/runtime-log-level-manager.git")
+            developerConnection.set("scm:git:ssh://git@github.com/theaob/runtime-log-level-manager.git")
         }
     }
 }

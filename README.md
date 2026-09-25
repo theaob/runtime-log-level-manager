@@ -15,25 +15,16 @@ kütüphane. Spring Boot Admin'in *Loggers* ekranına benzer bir pencereyi uygul
 
 ## Kurulum
 
-JitPack üzerinden:
+Maven Central üzerinden:
 
 ```kotlin
-// settings.gradle.kts
-dependencyResolutionManagement {
-    repositories {
-        mavenCentral()
-        maven("https://jitpack.io")
-    }
-}
-
-// build.gradle.kts
 dependencies {
-    implementation("com.github.theaob.runtime-log-level-manager:log-level-manager:<tag veya commit>")
+    implementation("tr.com.onurbaykal:log-level-manager:<sürüm>")
 }
 ```
 
-Yerel olarak kullanmak için: `./gradlew :log-level-manager:publishToMavenLocal` ve
-`implementation("tr.com.onurbaykal:log-level-manager:0.1.0")` (`mavenLocal()` reposu ile).
+Yerel olarak denemek için: `./gradlew :log-level-manager:publishToMavenLocal` ve
+`implementation("tr.com.onurbaykal:log-level-manager:0.1.0-SNAPSHOT")` (`mavenLocal()` reposu ile).
 
 Gereksinimler: Java 11+, JavaFX 17+ (`javafx.controls`).
 
@@ -92,3 +83,40 @@ bayrağın (ör. `-Ddebug.tools=true`) arkasına koymanız yeterli.
 ./gradlew :log-level-manager:test   # backend testleri
 ./gradlew :sample:run               # örnek uygulama (Logback)
 ```
+
+## CI ve sürüm yayınlama
+
+- `.github/workflows/ci.yml`: `main`'e her push'ta ve her PR'da Linux, Windows ve macOS üzerinde
+  `./gradlew build` çalıştırır.
+- `.github/workflows/release.yml`: `v` ile başlayan bir tag push'landığında (ör. `v0.1.0`) o sürümü
+  imzalayıp Maven Central'a yayınlar ve bir GitHub Release oluşturur.
+
+```bash
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+### Tek seferlik kurulum
+
+1. [central.sonatype.com](https://central.sonatype.com) üzerinde hesap açın ve `tr.com.onurbaykal`
+   namespace'ini ekleyin. Doğrulama için `onurbaykal.com.tr` alan adına portalın verdiği DNS TXT
+   kaydını ekleyin.
+2. Portalda *View Account → Generate User Token* ile bir kullanıcı token'ı oluşturun.
+3. Bir GPG anahtarı oluşturup açık anahtarı bir keyserver'a yükleyin:
+
+   ```bash
+   gpg --quick-gen-key "Onur Baykal <e-posta>" rsa4096 sign 2y
+   gpg --list-keys --keyid-format short          # anahtar kimliği, ör. 1A2B3C4D
+   gpg --keyserver keyserver.ubuntu.com --send-keys <ANAHTAR_KİMLİĞİ>
+   gpg --armor --export-secret-keys <ANAHTAR_KİMLİĞİ>   # SIGNING_KEY secret'ının değeri
+   ```
+
+4. GitHub'da *Settings → Secrets and variables → Actions* altında şu repository secret'larını ekleyin:
+
+   | Secret | Değer |
+   |---|---|
+   | `MAVEN_CENTRAL_USERNAME` | User token kullanıcı adı |
+   | `MAVEN_CENTRAL_PASSWORD` | User token parolası |
+   | `SIGNING_KEY` | ASCII-armored gizli GPG anahtarı |
+   | `SIGNING_KEY_ID` | Anahtar kimliğinin son 8 karakteri |
+   | `SIGNING_KEY_PASSWORD` | GPG anahtarının parolası |

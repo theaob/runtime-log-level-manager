@@ -1,4 +1,0 @@
-jdk:
-  - openjdk17
-install:
-  - ./gradlew :log-level-manager:publishToMavenLocal -x test
