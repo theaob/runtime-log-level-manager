@@ -12,14 +12,14 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 17
 
-      - uses: gradle/actions/setup-gradle@v4
+      - uses: gradle/actions/setup-gradle@v5
 
       - name: Check secrets
         run: |
@@ -48,7 +48,13 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKeyId: ${{ secrets.SIGNING_KEY_ID }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_KEY_PASSWORD }}
 
-      - name: Create GitHub release
-        run: gh release create "$GITHUB_REF_NAME" --generate-notes log-level-manager/build/libs/*.jar
+      # The release may already exist when it was created from the GitHub UI together with the tag.
+      - name: Create or update GitHub release
+        run: |
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" log-level-manager/build/libs/*.jar --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" --generate-notes log-level-manager/build/libs/*.jar
+          fi
         env:
           GH_TOKEN: ${{ github.token }}
