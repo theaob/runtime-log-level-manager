@@ -36,15 +36,21 @@ object LogLevelManager {
     @Volatile
     private var customBackend: LoggingBackend? = null
 
+    @Volatile
     private var stage: Stage? = null
 
-    /** Backend used to read and change levels; detected automatically unless set explicitly. */
+    /**
+     * Backend used to read and change levels; detected automatically unless set explicitly.
+     * Setting it forgets the changes tracked so far and closes the log level window if it is
+     * open, because the window is bound to the backend it was created with.
+     */
     @JvmStatic
     var backend: LoggingBackend
         get() = customBackend ?: detectedBackend
         set(value) {
             customBackend = value
             tracker.clear()
+            closeStage()
         }
 
     /** All loggers known to the backend. */
@@ -134,6 +140,15 @@ object LogLevelManager {
             accelerator = shortcut
             setOnAction { show(parentPopup?.ownerWindow?.let(::rootWindow)) }
         }
+
+    private fun closeStage() {
+        if (stage == null) return
+        val close = Runnable {
+            stage?.close()
+            stage = null
+        }
+        if (Platform.isFxApplicationThread()) close.run() else Platform.runLater(close)
+    }
 
     private fun rootWindow(window: Window): Window {
         var current = window
