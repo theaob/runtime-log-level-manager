@@ -21,8 +21,14 @@ internal class ChangeTracker {
     @Synchronized
     fun count(): Int = originals.size
 
+    /** Copy of the tracked loggers with their original levels, in the order they were first changed. */
     @Synchronized
-    fun drain(): Map<String, LogLevel?> = LinkedHashMap(originals).also { originals.clear() }
+    fun snapshot(): Map<String, LogLevel?> = LinkedHashMap(originals)
+
+    @Synchronized
+    fun forget(name: String) {
+        originals.remove(name)
+    }
 
     @Synchronized
     fun clear() = originals.clear()

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertInstanceOf
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class LogLevelManagerTest {
 
@@ -36,6 +37,30 @@ class LogLevelManagerTest {
         LogLevelManager.setLevel("com.example.roundtrip", LogLevel.ERROR)
         LogLevelManager.setLevel("com.example.roundtrip", null)
         assertFalse(LogLevelManager.isModified("com.example.roundtrip"))
+    }
+
+    @Test
+    fun `revertAll keeps loggers whose revert failed and reverts the rest`() {
+        val failing = object : LoggingBackend by LogbackBackend() {
+            override fun setLevel(name: String, level: LogLevel?) {
+                if (name == "com.example.broken" && level == null) throw IllegalStateException("boom")
+                LogbackBackend().setLevel(name, level)
+            }
+        }
+        LogLevelManager.backend = failing
+        LogLevelManager.setLevel("com.example.broken", LogLevel.WARN)
+        LogLevelManager.setLevel("com.example.fine", LogLevel.WARN)
+
+        val error = assertThrows<IllegalStateException> { LogLevelManager.revertAll() }
+
+        assertEquals("boom", error.message)
+        assertEquals(null, LogLevelManager.getLogger("com.example.fine").configuredLevel)
+        assertFalse(LogLevelManager.isModified("com.example.fine"))
+        assertTrue(LogLevelManager.isModified("com.example.broken"))
+        assertEquals(1, LogLevelManager.modifiedCount())
+
+        LogLevelManager.backend = LogbackBackend()
+        LogLevelManager.setLevel("com.example.broken", null)
     }
 
     @Test
