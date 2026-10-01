@@ -1,0 +1,25 @@
+version: 2
+updates:
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      # One PR per week for all minor/patch bumps instead of one PR per library
+      gradle-minor-and-patch:
+        update-types: [minor, patch]
+    ignore:
+      # 0.35+ requires Kotlin 2.2; bump together with the Kotlin plugin
+      - dependency-name: com.vanniktech.maven.publish
+        versions: [">= 0.35.0"]
+      # The library stays on JavaFX 17 so that it works with Java 11 hosts
+      - dependency-name: org.openjfx:*
+        update-types: [version-update:semver-major]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      github-actions:
+        update-types: [minor, patch]
