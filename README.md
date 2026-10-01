@@ -31,7 +31,7 @@ dependencies {
 To try it locally: `./gradlew :log-level-manager:publishToMavenLocal`, then
 `implementation("tr.com.onurbaykal:log-level-manager:0.1.0-SNAPSHOT")` with the `mavenLocal()` repository.
 
-Requirements: Java 11+, JavaFX 17+ (`javafx.controls`).
+Requirements: Java 17+, JavaFX 17+ (`javafx.controls`).
 
 ## Usage
 
