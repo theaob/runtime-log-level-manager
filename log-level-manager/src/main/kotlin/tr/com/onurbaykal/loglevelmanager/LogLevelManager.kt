@@ -86,11 +86,26 @@ object LogLevelManager {
     @JvmStatic
     fun modifiedCount(): Int = tracker.count()
 
-    /** Restores every logger changed through this manager to the level it had before. */
+    /**
+     * Restores every logger changed through this manager to the level it had before.
+     *
+     * Loggers are reverted in reverse order of their first change. A logger whose revert fails
+     * stays tracked so that it can be retried; the first failure is rethrown after all others
+     * have been reverted.
+     */
     @JvmStatic
     fun revertAll() {
         val backend = backend
-        tracker.drain().entries.reversed().forEach { (name, original) -> backend.setLevel(name, original) }
+        var failure: Exception? = null
+        for ((name, original) in tracker.snapshot().entries.reversed()) {
+            try {
+                backend.setLevel(name, original)
+                tracker.forget(name)
+            } catch (e: Exception) {
+                if (failure == null) failure = e
+            }
+        }
+        failure?.let { throw it }
     }
 
     /** Creates a new log level view that can be embedded anywhere, e.g. in a `Tab` or `Dialog`. */
