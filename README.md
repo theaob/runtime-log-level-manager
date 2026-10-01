@@ -1,122 +1,127 @@
 # Runtime Log Level Manager
 
-Kotlin/JavaFX uygulamalarında logger seviyelerini **çalışma anında** değiştirmek için drop-in
-kütüphane. Spring Boot Admin'in *Loggers* ekranına benzer bir pencereyi uygulamanın içinden açar.
+English · [Türkçe](README.tr.md)
 
-![Log Levels penceresi](docs/screenshot.png)
+[![Maven Central](https://img.shields.io/maven-central/v/tr.com.onurbaykal/log-level-manager)](https://central.sonatype.com/artifact/tr.com.onurbaykal/log-level-manager)
+[![CI](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml)
 
-- Logback, Log4j2 ve java.util.logging desteği; hangisini kullandığınız otomatik algılanır
-  (SLF4J bağlaması → Log4j2 core → JUL sırasıyla).
-- Filtreleme, sadece yapılandırılmış / sadece bu oturumda değişen loggerları gösterme.
-- Tek tıkla seviye değiştirme, `Reset` ile üst loggerdan miras almaya dönme.
-- Henüz oluşturulmamış bir sınıf ya da paket için isimle seviye atama.
-- `Revert changes` ile oturumdaki tüm değişiklikleri geri alma.
-- Ek bağımlılık getirmez: JavaFX ve loglama kütüphanesi uygulamanızdan gelir.
+Drop-in library for changing logger levels **at runtime** in Kotlin/JavaFX applications. It opens a
+window similar to Spring Boot Admin's *Loggers* screen from inside the application.
 
-## Kurulum
+![Log Levels window](docs/screenshot.png)
 
-Maven Central üzerinden:
+- Logback, Log4j2 and java.util.logging; the one in use is detected automatically
+  (SLF4J binding → Log4j2 core → JUL).
+- Filter loggers, show only configured ones or only those changed in this session.
+- Change a level with one click; `Reset` makes the logger inherit from its parent again.
+- Set the level of a class or package by name, even before its logger exists.
+- `Revert changes` restores everything changed in this session.
+- No extra dependencies: JavaFX and the logging framework come from your application.
+
+## Installation
+
+From Maven Central:
 
 ```kotlin
 dependencies {
-    implementation("tr.com.onurbaykal:log-level-manager:<sürüm>")
+    implementation("tr.com.onurbaykal:log-level-manager:<version>")
 }
 ```
 
-Yerel olarak denemek için: `./gradlew :log-level-manager:publishToMavenLocal` ve
-`implementation("tr.com.onurbaykal:log-level-manager:0.1.0-SNAPSHOT")` (`mavenLocal()` reposu ile).
+To try it locally: `./gradlew :log-level-manager:publishToMavenLocal`, then
+`implementation("tr.com.onurbaykal:log-level-manager:0.1.0-SNAPSHOT")` with the `mavenLocal()` repository.
 
-Gereksinimler: Java 11+, JavaFX 17+ (`javafx.controls`).
+Requirements: Java 11+, JavaFX 17+ (`javafx.controls`).
 
-## Kullanım
+## Usage
 
 ```kotlin
 override fun start(stage: Stage) {
     stage.scene = Scene(root)
 
-    // Ctrl+Shift+L (macOS'ta Cmd+Shift+L) ile pencereyi açar
+    // Opens the window with Ctrl+Shift+L (Cmd+Shift+L on macOS)
     LogLevelManager.install(stage.scene)
 
-    // ya da bir menüye ekleyin
+    // ...or add it to a menu
     menuBar.menus += Menu("Tools", null, LogLevelManager.createMenuItem())
 
     stage.show()
 }
 ```
 
-Diğer seçenekler:
+Other options:
 
 ```kotlin
-LogLevelManager.show(ownerWindow)                  // pencereyi doğrudan aç (her thread'den çağrılabilir)
-val view = LogLevelManager.createView()            // kendi Tab/Dialog'unuza gömün
+LogLevelManager.show(ownerWindow)                  // open the window directly (safe from any thread)
+val view = LogLevelManager.createView()            // embed in your own Tab or Dialog
 LogLevelManager.setLevel(MyService::class, LogLevel.DEBUG)
 LogLevelManager.setLevel("com.example.db", LogLevel.TRACE)
-LogLevelManager.setLevel("com.example.db", null)    // miras almaya geri dön
+LogLevelManager.setLevel("com.example.db", null)    // inherit from the parent again
 LogLevelManager.revertAll()
 scene.installLogLevelManager(KeyCombination.keyCombination("F12"))
 ```
 
-Pencereyi yalnızca geliştirme ya da destek modunda açmak isterseniz `install` çağrısını bir
-bayrağın (ör. `-Ddebug.tools=true`) arkasına koymanız yeterli.
+To make the window available only in development or support builds, put the `install` call
+behind a flag such as `-Ddebug.tools=true`.
 
-### Arayüzdeki renkler
+### Colors in the UI
 
-- **Dolu buton**: seviye bu loggerda açıkça ayarlanmış (`Reset` görünür).
-- **Çerçeveli buton**: seviye bir üst loggerdan miras alınıyor.
-- **Solda mavi çizgi**: logger bu oturumda değiştirildi.
+- **Filled button**: the level is set explicitly on this logger (`Reset` is shown).
+- **Outlined button**: the level is inherited from a parent logger.
+- **Blue bar on the left**: the logger was changed in this session.
 
-## Notlar
+## Notes
 
-- Değişiklikler kalıcı değildir; uygulama yeniden başladığında konfigürasyon dosyanız geçerli olur.
-  Logback'in `scan="true"` ya da Log4j2'nin `monitorInterval` özelliği dosyayı yeniden yüklerse
-  arayüzden yapılan değişiklikler de sıfırlanır.
-- **java.util.logging**: handler'ların kendi seviyeleri vardır (varsayılan `ConsoleHandler` INFO).
-  Bir loggeri DEBUG/TRACE'e çektiğinizde çıktı görmek için handler seviyesini de düşürmeniz gerekir.
-- Farklı bir loglama altyapısı için `LoggingBackend` arayüzünü uygulayıp
-  `LogLevelManager.backend = MyBackend()` ile ya da `META-INF/services/tr.com.onurbaykal.loglevelmanager.LoggingBackend`
-  dosyasıyla kaydedebilirsiniz.
-- Modüler (JPMS) uygulamalarda modül adı `tr.com.onurbaykal.loglevelmanager`'dir.
+- Changes are not persistent; your configuration file applies again when the application
+  restarts. If Logback's `scan="true"` or Log4j2's `monitorInterval` reloads the file, changes
+  made through the UI are reset as well.
+- **java.util.logging**: handlers have their own levels (the default `ConsoleHandler` is INFO).
+  After lowering a logger to DEBUG/TRACE you also need to lower the handler level to see output.
+- For another logging framework, implement `LoggingBackend` and register it either with
+  `LogLevelManager.backend = MyBackend()` or through
+  `META-INF/services/tr.com.onurbaykal.loglevelmanager.LoggingBackend`.
+- In modular (JPMS) applications the module name is `tr.com.onurbaykal.loglevelmanager`.
 
-## Geliştirme
+## Development
 
 ```bash
-./gradlew :log-level-manager:test   # backend testleri
-./gradlew :sample:run               # örnek uygulama (Logback)
+./gradlew :log-level-manager:test   # backend tests
+./gradlew :sample:run               # sample application (Logback)
 ```
 
-## CI ve sürüm yayınlama
+## CI and releases
 
-- `.github/workflows/ci.yml`: `main`'e her push'ta ve her PR'da Linux, Windows ve macOS üzerinde
-  `./gradlew build` çalıştırır.
-- `.github/workflows/release.yml`: `v` ile başlayan bir tag push'landığında (ör. `v0.1.0`) o sürümü
-  imzalayıp Maven Central'a yayınlar ve bir GitHub Release oluşturur.
+- `.github/workflows/ci.yml`: runs `./gradlew build` on Linux, Windows and macOS for every push to
+  `main` and every pull request.
+- `.github/workflows/release.yml`: when a tag starting with `v` is pushed (e.g. `v0.1.0`), signs and
+  publishes that version to Maven Central and creates a GitHub release.
 
 ```bash
 git tag v0.1.0
 git push origin v0.1.0
 ```
 
-### Tek seferlik kurulum
+### One-time setup
 
-1. [central.sonatype.com](https://central.sonatype.com) üzerinde hesap açın ve `tr.com.onurbaykal`
-   namespace'ini ekleyin. Doğrulama için `onurbaykal.com.tr` alan adına portalın verdiği DNS TXT
-   kaydını ekleyin.
-2. Portalda *View Account → Generate User Token* ile bir kullanıcı token'ı oluşturun.
-3. Bir GPG anahtarı oluşturup açık anahtarı bir keyserver'a yükleyin:
+1. Create an account on [central.sonatype.com](https://central.sonatype.com) and add the
+   `tr.com.onurbaykal` namespace. Verify it by adding the DNS TXT record the portal gives you to
+   the `onurbaykal.com.tr` domain.
+2. In the portal, create a user token via *View Account → Generate User Token*.
+3. Create a GPG key and upload the public key to a keyserver:
 
    ```bash
-   gpg --quick-gen-key "Onur Baykal <e-posta>" rsa4096 sign 2y
-   gpg --list-keys --keyid-format short          # anahtar kimliği, ör. 1A2B3C4D
-   gpg --keyserver keyserver.ubuntu.com --send-keys <ANAHTAR_KİMLİĞİ>
-   gpg --armor --export-secret-keys <ANAHTAR_KİMLİĞİ>   # SIGNING_KEY secret'ının değeri
+   gpg --quick-gen-key "Onur Baykal <email>" rsa4096 sign 2y
+   gpg --list-keys --keyid-format short          # key id, e.g. 1A2B3C4D
+   gpg --keyserver keyserver.ubuntu.com --send-keys <KEY_ID>
+   gpg --armor --export-secret-keys <KEY_ID>     # value of the SIGNING_KEY secret
    ```
 
-4. GitHub'da *Settings → Secrets and variables → Actions* altında şu repository secret'larını ekleyin:
+4. Add these repository secrets under *Settings → Secrets and variables → Actions* on GitHub:
 
-   | Secret | Değer |
+   | Secret | Value |
    |---|---|
-   | `MAVEN_CENTRAL_USERNAME` | User token kullanıcı adı |
-   | `MAVEN_CENTRAL_PASSWORD` | User token parolası |
-   | `SIGNING_KEY` | ASCII-armored gizli GPG anahtarı |
-   | `SIGNING_KEY_ID` | Anahtar kimliğinin son 8 karakteri |
-   | `SIGNING_KEY_PASSWORD` | GPG anahtarının parolası |
+   | `MAVEN_CENTRAL_USERNAME` | User token username |
+   | `MAVEN_CENTRAL_PASSWORD` | User token password |
+   | `SIGNING_KEY` | ASCII-armored secret GPG key |
+   | `SIGNING_KEY_ID` | Last 8 characters of the key id |
+   | `SIGNING_KEY_PASSWORD` | Passphrase of the GPG key |
