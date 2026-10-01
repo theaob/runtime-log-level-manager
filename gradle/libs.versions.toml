@@ -1,10 +1,10 @@
 [versions]
-kotlin = "2.1.21"
+kotlin = "2.4.20"
 javafx-plugin = "0.1.0"
 maven-publish = "0.34.0"
-slf4j = "2.0.17"
-logback = "1.5.18"
-log4j = "2.24.3"
+slf4j = "2.0.20"
+logback = "1.6.4"
+log4j = "2.26.1"
 junit = "5.11.4"
 
 [libraries]
