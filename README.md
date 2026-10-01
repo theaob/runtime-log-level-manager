@@ -2,8 +2,10 @@
 
 English · [Türkçe](README.tr.md)
 
-[![Maven Central](https://img.shields.io/maven-central/v/tr.com.onurbaykal/log-level-manager)](https://central.sonatype.com/artifact/tr.com.onurbaykal/log-level-manager)
-[![CI](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml/badge.svg)](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml)
+[![Maven Central](https://img.shields.io/maven-central/v/tr.com.onurbaykal/log-level-manager?label=Maven%20Central)](https://central.sonatype.com/artifact/tr.com.onurbaykal/log-level-manager)
+[![CI](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml)
+[![Release](https://github.com/theaob/runtime-log-level-manager/actions/workflows/release.yml/badge.svg)](https://github.com/theaob/runtime-log-level-manager/actions/workflows/release.yml)
+[![License](https://img.shields.io/github/license/theaob/runtime-log-level-manager)](LICENSE)
 
 Drop-in library for changing logger levels **at runtime** in Kotlin/JavaFX applications. It opens a
 window similar to Spring Boot Admin's *Loggers* screen from inside the application.

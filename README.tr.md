@@ -2,6 +2,11 @@
 
 [English](README.md) · Türkçe
 
+[![Maven Central](https://img.shields.io/maven-central/v/tr.com.onurbaykal/log-level-manager?label=Maven%20Central)](https://central.sonatype.com/artifact/tr.com.onurbaykal/log-level-manager)
+[![CI](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/theaob/runtime-log-level-manager/actions/workflows/ci.yml)
+[![Release](https://github.com/theaob/runtime-log-level-manager/actions/workflows/release.yml/badge.svg)](https://github.com/theaob/runtime-log-level-manager/actions/workflows/release.yml)
+[![License](https://img.shields.io/github/license/theaob/runtime-log-level-manager)](LICENSE)
+
 Kotlin/JavaFX uygulamalarında logger seviyelerini **çalışma anında** değiştirmek için drop-in
 kütüphane. Spring Boot Admin'in *Loggers* ekranına benzer bir pencereyi uygulamanın içinden açar.
 
