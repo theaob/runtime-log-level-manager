@@ -64,6 +64,26 @@ class LogLevelManagerTest {
     }
 
     @Test
+    fun `changes overwritten outside the manager are dropped`() {
+        val backend = LogbackBackend()
+        LogLevelManager.backend = backend
+        LogLevelManager.setLevel("com.example.reloaded", LogLevel.WARN)
+        LogLevelManager.setLevel("com.example.untouched", LogLevel.WARN)
+
+        // Simulate a configuration reload that assigns a different level
+        backend.setLevel("com.example.reloaded", LogLevel.ERROR)
+
+        assertEquals(listOf("com.example.reloaded"), LogLevelManager.dropOverwrittenChanges())
+        assertFalse(LogLevelManager.isModified("com.example.reloaded"))
+        assertTrue(LogLevelManager.isModified("com.example.untouched"))
+
+        LogLevelManager.revertAll()
+        assertEquals(LogLevel.ERROR, LogLevelManager.getLogger("com.example.reloaded").configuredLevel)
+        assertEquals(null, LogLevelManager.getLogger("com.example.untouched").configuredLevel)
+        backend.setLevel("com.example.reloaded", null)
+    }
+
+    @Test
     fun `parses level names`() {
         assertEquals(LogLevel.WARN, LogLevel.parse(" warning "))
         assertEquals(LogLevel.DEBUG, LogLevel.parse("debug"))

@@ -70,7 +70,7 @@ object LogLevelManager {
         val before = backend.getLogger(name)
         tracker.recordOriginal(before.name, before.configuredLevel)
         backend.setLevel(before.name, level)
-        tracker.forgetIfUnchanged(before.name, backend.getLogger(before.name).configuredLevel)
+        tracker.recordApplied(before.name, backend.getLogger(before.name).configuredLevel)
     }
 
     @JvmStatic
@@ -87,6 +87,18 @@ object LogLevelManager {
     fun modifiedCount(): Int = tracker.count()
 
     /**
+     * Stops tracking loggers whose level was changed outside this manager since it was last set
+     * here, typically because the logging configuration was reloaded (Logback `scan="true"`,
+     * Log4j2 `monitorInterval`). Their recorded original levels are stale, so reverting them
+     * would set levels the current configuration never had. Returns the names dropped.
+     */
+    @JvmStatic
+    fun dropOverwrittenChanges(): List<String> {
+        val backend = backend
+        return tracker.dropOverwritten { name -> backend.getLogger(name).configuredLevel }
+    }
+
+    /**
      * Restores every logger changed through this manager to the level it had before.
      *
      * Loggers are reverted in reverse order of their first change. A logger whose revert fails
@@ -96,6 +108,7 @@ object LogLevelManager {
     @JvmStatic
     fun revertAll() {
         val backend = backend
+        dropOverwrittenChanges()
         var failure: Exception? = null
         for ((name, original) in tracker.snapshot().entries.reversed()) {
             try {

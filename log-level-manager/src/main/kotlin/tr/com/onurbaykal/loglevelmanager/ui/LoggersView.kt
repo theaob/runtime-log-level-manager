@@ -61,6 +61,7 @@ class LoggersView : BorderPane() {
 
     /** Reloads all loggers from the backend, keeping the current filter and selection. */
     fun refresh() {
+        LogLevelManager.dropOverwrittenChanges()
         val selected = table.selectionModel.selectedItem?.name
         loggers.setAll(backend.getLoggers().sortedWith(compareBy<LoggerInfo> { !it.isRoot }.thenBy { it.name }))
         selected?.let(::select)
