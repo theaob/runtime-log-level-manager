@@ -33,7 +33,7 @@ dependencies {
 ```
 
 Yerel olarak denemek için: `./gradlew :log-level-manager:publishToMavenLocal` ve
-`implementation("tr.com.onurbaykal:log-level-manager:0.1.0-SNAPSHOT")` (`mavenLocal()` reposu ile).
+`implementation("tr.com.onurbaykal:log-level-manager:0.2.0-SNAPSHOT")` (`mavenLocal()` reposu ile).
 
 Gereksinimler: Java 17+, JavaFX 17+ (`javafx.controls`).
 

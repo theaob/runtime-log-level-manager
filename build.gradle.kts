@@ -7,5 +7,5 @@ plugins {
 allprojects {
     group = "tr.com.onurbaykal"
     // Release builds pass -PreleaseVersion=x.y.z (see .github/workflows/release.yml)
-    version = providers.gradleProperty("releaseVersion").getOrElse("0.1.0-SNAPSHOT")
+    version = providers.gradleProperty("releaseVersion").getOrElse("0.2.0-SNAPSHOT")
 }
