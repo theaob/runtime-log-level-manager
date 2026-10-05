@@ -210,11 +210,19 @@ class LoggersView : BorderPane() {
             }
         }
 
+        private val sourceTag = Label().apply { styleClass += "source-tag" }
+
         override fun updateItem(item: LoggerInfo?, empty: Boolean) {
             super.updateItem(item, empty)
             text = if (empty || item == null) null else item.name
+            graphic = if (empty || item?.source == null) null else sourceTag.apply { text = item.source }
+            contentDisplay = javafx.scene.control.ContentDisplay.RIGHT
             tooltip = if (empty || item == null) null else Tooltip(
-                "${item.name}\nEffective: ${item.effectiveLevel}\nConfigured: ${item.configuredLevel ?: "inherited"}\n(double-click to copy the name)",
+                buildString {
+                    append(item.name)
+                    item.source?.let { append(" ($it)") }
+                    append("\nEffective: ${item.effectiveLevel}\nConfigured: ${item.configuredLevel ?: "inherited"}\n(double-click to copy the name)")
+                },
             )
         }
     }

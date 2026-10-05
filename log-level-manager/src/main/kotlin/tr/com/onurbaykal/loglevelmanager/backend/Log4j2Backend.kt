@@ -33,6 +33,12 @@ class Log4j2Backend : LoggingBackend {
 
     override fun getLogger(name: String): LoggerInfo = toInfo(context, toLog4jName(name))
 
+    override fun exists(name: String): Boolean {
+        val log4jName = toLog4jName(name)
+        val context = context
+        return log4jName.isEmpty() || context.configuration.loggers.containsKey(log4jName) || context.hasLogger(log4jName)
+    }
+
     override fun setLevel(name: String, level: LogLevel?) {
         val context = context
         val config = context.configuration

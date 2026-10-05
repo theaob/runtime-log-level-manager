@@ -31,6 +31,11 @@ class JulBackend : LoggingBackend {
 
     override fun getLogger(name: String): LoggerInfo = toInfo(logger(name))
 
+    override fun exists(name: String): Boolean {
+        val normalized = LoggingBackend.normalizeName(name)
+        return manager.getLogger(if (normalized == LoggingBackend.ROOT_LOGGER_NAME) "" else normalized) != null
+    }
+
     override fun setLevel(name: String, level: LogLevel?) {
         val logger = logger(name)
         require(level != null || logger.name.isNotEmpty()) { "The root logger level cannot be reset" }

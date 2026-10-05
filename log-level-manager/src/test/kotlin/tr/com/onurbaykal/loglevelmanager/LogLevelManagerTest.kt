@@ -1,5 +1,6 @@
 package tr.com.onurbaykal.loglevelmanager
 
+import tr.com.onurbaykal.loglevelmanager.backend.CompositeBackend
 import tr.com.onurbaykal.loglevelmanager.backend.LogbackBackend
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -11,8 +12,9 @@ import org.junit.jupiter.api.assertThrows
 class LogLevelManagerTest {
 
     @Test
-    fun `detects logback through slf4j`() {
-        assertInstanceOf(LogbackBackend::class.java, LoggingBackends.detect())
+    fun `detects logback through slf4j and adds JUL to it`() {
+        val backend = assertInstanceOf(CompositeBackend::class.java, LoggingBackends.detect())
+        assertInstanceOf(LogbackBackend::class.java, backend.primary)
     }
 
     @Test

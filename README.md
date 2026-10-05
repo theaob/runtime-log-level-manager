@@ -14,6 +14,8 @@ window similar to Spring Boot Admin's *Loggers* screen from inside the applicati
 
 - Logback, Log4j2 and java.util.logging; the one in use is detected automatically
   (SLF4J binding → Log4j2 core → JUL).
+- java.util.logging loggers (JavaFX, the JDK, legacy libraries) are listed next to the Logback or
+  Log4j2 ones, tagged `JUL`, and their output can be routed into your appenders with one call.
 - Filter loggers, show only configured ones or only those changed in this session.
 - Change a level with one click; `Reset` makes the logger inherit from its parent again.
 - Set the level of a class or package by name, even before its logger exists.
@@ -66,6 +68,26 @@ scene.installLogLevelManager(KeyCombination.keyCombination("F12"))
 To make the window available only in development or support builds, put the `install` call
 behind a flag such as `-Ddebug.tools=true`.
 
+### java.util.logging
+
+JavaFX, parts of the JDK (`java.net.http`, `javax.net.ssl`, …) and some libraries log through
+java.util.logging (JUL), which Logback and Log4j2 never see. The library handles this in two
+steps:
+
+- **Listing.** When Logback or Log4j2 is the main framework, JUL loggers appear in the same
+  window tagged `JUL`. Changing a level applies it to the JUL logger too, so the JUL side never
+  filters more than the main framework would.
+- **Bridging.** `LogLevelManager.bridgeJul()` installs a handler on the JUL root that forwards
+  every record to the SLF4J logger of the same name, so JUL output lands in your Logback or
+  Log4j2 appenders with your pattern and your levels. The JUL console handler is removed to avoid
+  duplicate output (`bridgeJul(removeExistingHandlers = false)` keeps it) and `unbridgeJul()`
+  restores everything. It needs `slf4j-api` on the classpath, which Logback and
+  `log4j-slf4j2-impl` already bring.
+
+```kotlin
+LogLevelManager.bridgeJul()   // once at startup, before the first JUL message you care about
+```
+
 ### Colors in the UI
 
 - **Filled button**: the level is set explicitly on this logger (`Reset` is shown).
@@ -77,8 +99,9 @@ behind a flag such as `-Ddebug.tools=true`.
 - Changes are not persistent; your configuration file applies again when the application
   restarts. If Logback's `scan="true"` or Log4j2's `monitorInterval` reloads the file, changes
   made through the UI are reset as well.
-- **java.util.logging**: handlers have their own levels (the default `ConsoleHandler` is INFO).
-  After lowering a logger to DEBUG/TRACE you also need to lower the handler level to see output.
+- **java.util.logging without the bridge**: handlers have their own levels (the default
+  `ConsoleHandler` is INFO). After lowering a logger to DEBUG/TRACE you also need to lower the
+  handler level to see output. With `bridgeJul()` the main framework's levels apply instead.
 - For another logging framework, implement `LoggingBackend` and register it either with
   `LogLevelManager.backend = MyBackend()` or through
   `META-INF/services/tr.com.onurbaykal.loglevelmanager.LoggingBackend`.

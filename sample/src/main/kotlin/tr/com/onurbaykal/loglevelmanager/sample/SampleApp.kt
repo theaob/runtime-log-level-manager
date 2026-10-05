@@ -2,6 +2,7 @@ package tr.com.onurbaykal.loglevelmanager.sample
 
 import tr.com.onurbaykal.loglevelmanager.LogLevelManager
 import tr.com.onurbaykal.loglevelmanager.sample.billing.InvoiceService
+import tr.com.onurbaykal.loglevelmanager.sample.legacy.LegacyExporter
 import tr.com.onurbaykal.loglevelmanager.sample.orders.OrderService
 import tr.com.onurbaykal.loglevelmanager.sample.orders.OrderRepository
 import javafx.animation.KeyFrame
@@ -22,12 +23,17 @@ import javafx.util.Duration
 class SampleApp : Application() {
 
     override fun start(stage: Stage) {
+        // Send java.util.logging output (JavaFX, JDK, LegacyExporter) through Logback as well
+        LogLevelManager.bridgeJul()
+
         val orders = OrderService(OrderRepository())
         val invoices = InvoiceService()
+        val exporter = LegacyExporter()
         Timeline(
             KeyFrame(Duration.seconds(1.0), {
                 orders.placeOrder()
                 invoices.createInvoice()
+                exporter.export()
             }),
         ).apply {
             cycleCount = Timeline.INDEFINITE

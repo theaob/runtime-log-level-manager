@@ -21,6 +21,12 @@ interface LoggingBackend {
     /** Returns the logger with the given name, creating it in the framework if necessary. */
     fun getLogger(name: String): LoggerInfo
 
+    /** Whether the framework already knows a logger with this name, without creating it. */
+    fun exists(name: String): Boolean {
+        val normalized = normalizeName(name)
+        return getLoggers().any { it.name == normalized }
+    }
+
     /**
      * Sets the level of the given logger. `null` removes the explicit level so the logger
      * inherits it from its parent again; this is not allowed for the root logger.
