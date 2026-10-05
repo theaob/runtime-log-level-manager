@@ -70,6 +70,16 @@
     -fx-padding: 0 0 0 9;
 }
 
+.log-level-manager .source-tag {
+    -fx-background-color: #eef1f5;
+    -fx-background-radius: 8;
+    -fx-text-fill: -llm-muted;
+    -fx-font-family: "System";
+    -fx-font-size: 0.75em;
+    -fx-font-weight: normal;
+    -fx-padding: 1 6 1 6;
+}
+
 .log-level-manager .table-row-cell:selected .name-cell {
     -fx-text-fill: white;
 }

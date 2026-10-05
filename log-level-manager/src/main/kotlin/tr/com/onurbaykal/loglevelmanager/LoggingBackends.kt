@@ -1,5 +1,6 @@
 package tr.com.onurbaykal.loglevelmanager
 
+import tr.com.onurbaykal.loglevelmanager.backend.CompositeBackend
 import tr.com.onurbaykal.loglevelmanager.backend.JulBackend
 import tr.com.onurbaykal.loglevelmanager.backend.Log4j2Backend
 import tr.com.onurbaykal.loglevelmanager.backend.LogbackBackend
@@ -11,6 +12,9 @@ object LoggingBackends {
     /**
      * Picks a backend in this order: a [ServiceLoader] registered [LoggingBackend], the framework
      * SLF4J is bound to, Log4j2 core, and finally java.util.logging which is always available.
+     *
+     * Logback and Log4j2 are wrapped in a [CompositeBackend] so that java.util.logging loggers
+     * show up next to them; see [JulBridge] for routing their output into the main framework.
      */
     @JvmStatic
     fun detect(): LoggingBackend {
@@ -18,11 +22,11 @@ object LoggingBackends {
 
         val slf4jFactory = slf4jFactoryClassName()
         when {
-            slf4jFactory == "ch.qos.logback.classic.LoggerContext" -> return LogbackBackend()
+            slf4jFactory == "ch.qos.logback.classic.LoggerContext" -> return CompositeBackend(LogbackBackend())
             slf4jFactory == "org.slf4j.jul.JDK14LoggerFactory" || slf4jFactory == "org.slf4j.impl.JDK14LoggerFactory" ->
                 return JulBackend()
         }
-        if (isLog4j2CoreActive()) return Log4j2Backend()
+        if (isLog4j2CoreActive()) return CompositeBackend(Log4j2Backend())
         return JulBackend()
     }
 

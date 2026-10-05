@@ -121,6 +121,18 @@ object LogLevelManager {
         failure?.let { throw it }
     }
 
+    /**
+     * Routes java.util.logging output (JavaFX, the JDK, …) into SLF4J so that it reaches the
+     * application's Logback or Log4j2 appenders. Shortcut for [JulBridge.install].
+     */
+    @JvmStatic
+    @JvmOverloads
+    fun bridgeJul(removeExistingHandlers: Boolean = true) = JulBridge.install(removeExistingHandlers)
+
+    /** Undoes [bridgeJul]. */
+    @JvmStatic
+    fun unbridgeJul() = JulBridge.uninstall()
+
     /** Creates a new log level view that can be embedded anywhere, e.g. in a `Tab` or `Dialog`. */
     @JvmStatic
     fun createView(): Parent = LoggersView()

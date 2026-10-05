@@ -14,6 +14,8 @@ kütüphane. Spring Boot Admin'in *Loggers* ekranına benzer bir pencereyi uygul
 
 - Logback, Log4j2 ve java.util.logging desteği; hangisini kullandığınız otomatik algılanır
   (SLF4J bağlaması → Log4j2 core → JUL sırasıyla).
+- java.util.logging logger'ları (JavaFX, JDK, eski kütüphaneler) Logback/Log4j2 listesinde `JUL`
+  etiketiyle görünür; çıktıları tek çağrıyla kendi appender'larınıza yönlendirilebilir.
 - Filtreleme, sadece yapılandırılmış / sadece bu oturumda değişen loggerları gösterme.
 - Tek tıkla seviye değiştirme, `Reset` ile üst loggerdan miras almaya dönme.
 - Henüz oluşturulmamış bir sınıf ya da paket için isimle seviye atama.
@@ -31,7 +33,7 @@ dependencies {
 ```
 
 Yerel olarak denemek için: `./gradlew :log-level-manager:publishToMavenLocal` ve
-`implementation("tr.com.onurbaykal:log-level-manager:0.1.0-SNAPSHOT")` (`mavenLocal()` reposu ile).
+`implementation("tr.com.onurbaykal:log-level-manager:0.2.0-SNAPSHOT")` (`mavenLocal()` reposu ile).
 
 Gereksinimler: Java 17+, JavaFX 17+ (`javafx.controls`).
 
@@ -66,6 +68,25 @@ scene.installLogLevelManager(KeyCombination.keyCombination("F12"))
 Pencereyi yalnızca geliştirme ya da destek modunda açmak isterseniz `install` çağrısını bir
 bayrağın (ör. `-Ddebug.tools=true`) arkasına koymanız yeterli.
 
+### java.util.logging
+
+JavaFX, JDK'nın bazı bölümleri (`java.net.http`, `javax.net.ssl`, …) ve bazı kütüphaneler
+java.util.logging (JUL) üzerinden log yazar; Logback ve Log4j2 bunları hiç görmez. Kütüphane
+bunu iki adımda çözer:
+
+- **Listeleme.** Ana framework Logback ya da Log4j2 iken JUL logger'ları aynı pencerede `JUL`
+  etiketiyle görünür. Bir seviye değiştirildiğinde JUL logger'ına da uygulanır; böylece JUL tarafı
+  ana framework'ten daha fazlasını filtrelemez.
+- **Köprüleme.** `LogLevelManager.bridgeJul()` JUL root'una, her kaydı aynı isimli SLF4J
+  logger'ına ileten bir handler kurar. JUL çıktısı kendi pattern'iniz ve seviyelerinizle Logback
+  ya da Log4j2 appender'larınıza düşer. Çift çıktı olmasın diye JUL konsol handler'ı kaldırılır
+  (`bridgeJul(removeExistingHandlers = false)` korur); `unbridgeJul()` her şeyi geri alır.
+  Classpath'te `slf4j-api` gerekir; Logback ve `log4j-slf4j2-impl` zaten getirir.
+
+```kotlin
+LogLevelManager.bridgeJul()   // açılışta bir kez, ilk önemli JUL mesajından önce
+```
+
 ### Arayüzdeki renkler
 
 - **Dolu buton**: seviye bu loggerda açıkça ayarlanmış (`Reset` görünür).
@@ -77,8 +98,9 @@ bayrağın (ör. `-Ddebug.tools=true`) arkasına koymanız yeterli.
 - Değişiklikler kalıcı değildir; uygulama yeniden başladığında konfigürasyon dosyanız geçerli olur.
   Logback'in `scan="true"` ya da Log4j2'nin `monitorInterval` özelliği dosyayı yeniden yüklerse
   arayüzden yapılan değişiklikler de sıfırlanır.
-- **java.util.logging**: handler'ların kendi seviyeleri vardır (varsayılan `ConsoleHandler` INFO).
-  Bir loggeri DEBUG/TRACE'e çektiğinizde çıktı görmek için handler seviyesini de düşürmeniz gerekir.
+- **Köprüsüz java.util.logging**: handler'ların kendi seviyeleri vardır (varsayılan
+  `ConsoleHandler` INFO). Bir loggeri DEBUG/TRACE'e çektiğinizde çıktı görmek için handler
+  seviyesini de düşürmeniz gerekir. `bridgeJul()` ile ana framework'ün seviyeleri geçerli olur.
 - Farklı bir loglama altyapısı için `LoggingBackend` arayüzünü uygulayıp
   `LogLevelManager.backend = MyBackend()` ile ya da `META-INF/services/tr.com.onurbaykal.loglevelmanager.LoggingBackend`
   dosyasıyla kaydedebilirsiniz.

@@ -23,6 +23,11 @@ class LogbackBackend : LoggingBackend {
 
     override fun getLogger(name: String): LoggerInfo = toInfo(logger(name))
 
+    override fun exists(name: String): Boolean {
+        val normalized = LoggingBackend.normalizeName(name)
+        return normalized == LoggingBackend.ROOT_LOGGER_NAME || context.exists(normalized) != null
+    }
+
     override fun setLevel(name: String, level: LogLevel?) {
         val logger = logger(name)
         require(level != null || logger.name != Logger.ROOT_LOGGER_NAME) { "The root logger level cannot be reset" }
