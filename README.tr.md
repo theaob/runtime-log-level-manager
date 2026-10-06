@@ -87,6 +87,25 @@ bunu iki adımda çözer:
 LogLevelManager.bridgeJul()   // açılışta bir kez, ilk önemli JUL mesajından önce
 ```
 
+#### Seviye eşlemesi
+
+JUL'da `FATAL`, yöneticide ise `CONFIG`/`FINER` olmadığı için iki taraf eşik değerleriyle eşlenir.
+Aynı eşikler, bir seviye JUL'a yazılırken, JUL seviyesi pencerede gösterilirken ve köprü bir kaydı
+iletirken kullanılır.
+
+| Yönetici | → JUL'a yazılırken | ← JUL'dan okunurken / köprüde |
+|---|---|---|
+| `OFF` | `OFF` | `OFF` |
+| `FATAL` | `SEVERE` | — (JUL karşılığı yok; `ERROR` olarak geri okunur) |
+| `ERROR` | `SEVERE` (1000) | ≥ 1000 |
+| `WARN` | `WARNING` (900) | ≥ 900 |
+| `INFO` | `INFO` (800) | ≥ 800 |
+| `DEBUG` | `FINE` (500) | ≥ 500, yani `CONFIG` (700) ve `FINE` |
+| `TRACE` | `FINEST` (300) | < 500, yani `FINER` (400), `FINEST` ve `ALL` |
+
+Özel `Level` alt sınıfları tamsayı değerlerine göre en yakın gruba düşer. Bu eşleme
+`jul-to-slf4j`'den farklıdır: o kütüphane `CONFIG`'i `INFO`, `FINER`'ı `DEBUG` sayar.
+
 ### Arayüzdeki renkler
 
 - **Dolu buton**: seviye bu loggerda açıkça ayarlanmış (`Reset` görünür).
