@@ -88,6 +88,25 @@ steps:
 LogLevelManager.bridgeJul()   // once at startup, before the first JUL message you care about
 ```
 
+#### Level mapping
+
+JUL has no `FATAL` and the manager has no `CONFIG`/`FINER`, so the two sides are mapped by
+threshold. The same thresholds are used when a level is written to JUL, when a JUL level is shown
+in the window, and when the bridge forwards a record.
+
+| Manager | → written to JUL | ← read from JUL / forwarded by the bridge |
+|---|---|---|
+| `OFF` | `OFF` | `OFF` |
+| `FATAL` | `SEVERE` | — (no JUL equivalent; reads back as `ERROR`) |
+| `ERROR` | `SEVERE` (1000) | ≥ 1000 |
+| `WARN` | `WARNING` (900) | ≥ 900 |
+| `INFO` | `INFO` (800) | ≥ 800 |
+| `DEBUG` | `FINE` (500) | ≥ 500, so `CONFIG` (700) and `FINE` |
+| `TRACE` | `FINEST` (300) | < 500, so `FINER` (400), `FINEST` and `ALL` |
+
+Custom `Level` subclasses fall into the nearest bucket by their integer value. Note that this
+differs from `jul-to-slf4j`, which maps `CONFIG` to `INFO` and `FINER` to `DEBUG`.
+
 ### Colors in the UI
 
 - **Filled button**: the level is set explicitly on this logger (`Reset` is shown).
