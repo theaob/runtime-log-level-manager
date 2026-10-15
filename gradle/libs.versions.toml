@@ -1,5 +1,5 @@
 [versions]
-kotlin = "2.4.20"
+kotlin = "2.4.21"
 javafx-plugin = "0.1.0"
 maven-publish = "0.37.0"
 slf4j = "2.0.20"
